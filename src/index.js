@@ -12,7 +12,7 @@ module.exports = function toReadable (number) {
       isEmpty(xs) ? [] : [take(number)(xs), ...chunk (number) (drop (number) (xs))];
     
     // numToWords :: (Number a, String a) => a -> String
-    let numToWords = number => {
+    let toReadable = number => {
       
       let a = [
         '', 'one', 'two', 'three', 'four',
@@ -44,7 +44,7 @@ module.exports = function toReadable (number) {
       let thousand = (group,i) => group === '' ? group : `${group} ${g[i]}`;
       
       if (typeof number === 'number')
-        return numToWords(String(number));
+        return toReadable(String(number));
       else if (number === '0')
         return 'zero';
       else
