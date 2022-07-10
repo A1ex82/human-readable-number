@@ -3,16 +3,16 @@ module.exports = function toReadable (number) {
     const num = x => Number(x) || 0;
     const str = x => String(x);
     const isEmpty = xs => xs.length === 0;
-    const take = n => xs => xs.slice(0,n);
-    const drop = n => xs => xs.slice(n);
+    const take = number => xs => xs.slice(0,number);
+    const drop = number => xs => xs.slice(number);
     const reverse = xs => xs.slice(0).reverse();
     const comp = f => g => x => f (g (x));
     const not = x => !x;
-    const chunk = n => xs =>
-      isEmpty(xs) ? [] : [take(n)(xs), ...chunk (n) (drop (n) (xs))];
+    const chunk = number => xs =>
+      isEmpty(xs) ? [] : [take(number)(xs), ...chunk (number) (drop (number) (xs))];
     
     // numToWords :: (Number a, String a) => a -> String
-    let number = n => {
+    let numToWords = number => {
       
       let a = [
         '', 'one', 'two', 'three', 'four',
@@ -43,12 +43,12 @@ module.exports = function toReadable (number) {
       
       let thousand = (group,i) => group === '' ? group : `${group} ${g[i]}`;
       
-      if (typeof n === 'number')
-        return number(String(n));
-      else if (n === '0')
+      if (typeof number === 'number')
+        return numToWords(String(number));
+      else if (number === '0')
         return 'zero';
       else
-        return comp (chunk(3)) (reverse) (arr(n))
+        return comp (chunk(3)) (reverse) (arr(number))
           .map(makeGroup)
           .map(thousand)
           .filter(comp(not)(isEmpty))
