@@ -1,58 +1,9 @@
 module.exports = function toReadable (number) {
-    const arr = x => Array.from(x);
-    const num = x => Number(x) || 0;
-    const str = x => String(x);
-    const isEmpty = xs => xs.length === 0;
-    const take = number => xs => xs.slice(0,number);
-    const drop = number => xs => xs.slice(number);
-    const reverse = xs => xs.slice(0).reverse();
-    const comp = f => g => x => f (g (x));
-    const not = x => !x;
-    const chunk = number => xs =>
-      isEmpty(xs) ? [] : [take(number)(xs), ...chunk (number) (drop (number) (xs))];
-    
-    // numToWords :: (Number a, String a) => a -> String
-    let toReadable = number => {
-      
-      let a = [
-        '', 'one', 'two', 'three', 'four',
-        'five', 'six', 'seven', 'eight', 'nine',
-        'ten', 'eleven', 'twelve', 'thirteen', 'fourteen',
-        'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'
-      ];
-      
-      let b = [
-        '', '', 'twenty', 'thirty', 'forty',
-        'fifty', 'sixty', 'seventy', 'eighty', 'ninety'
-      ];
-      
-      let g = [
-        '', 'thousand', 'million', 'billion', 'trillion', 'quadrillion',
-        'quintillion', 'sextillion', 'septillion', 'octillion', 'nonillion'
-      ];
-      
-      // this part is really nasty still
-      // it might edit this again later to show how Monoids could fix this up
-      let makeGroup = ([ones,tens,huns]) => {
-        return [
-          num(huns) === 0 ? '' : a[huns] + ' hundred ',
-          num(ones) === 0 ? b[tens] : b[tens] && b[tens] + '-' || '',
-          a[tens+ones] || a[ones]
-        ].join('');
-      };
-      
-      let thousand = (group,i) => group === '' ? group : `${group} ${g[i]}`;
-      
-      if (typeof number === 'number')
-        return toReadable(String(number));
-      else if (number === '0')
-        return 'zero';
-      else
-        return comp (chunk(3)) (reverse) (arr(number))
-          .map(makeGroup)
-          .map(thousand)
-          .filter(comp(not)(isEmpty))
-          .reverse()
-          .join(' ');
-    };
+  var num = "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen".split(" ");
+var tens = "twenty thirty forty fifty sixty seventy eighty ninety".split(" ");
+  if (number < 20) return num[number];
+    var digit = number%10;
+    if (number < 100) return tens[~~(number/10)-2] + (digit? " " + num[digit]: "");
+    if (number < 1000) return num[~~(number/100)] +" hundred" + (number%100 == 0? "": " " + toReadable(number%100));
+    return toReadable(~~(number/1000)) + " thousand" + (number%1000 != 0? " " + toReadable(number%1000): "");
 };
